@@ -41,4 +41,4 @@ def init_db():
     conn.commit()
     conn.close()
 
-    print("Database has been initialized successfully with a unique ID for each item.")
+    print("Database has been initialized successfully.")
