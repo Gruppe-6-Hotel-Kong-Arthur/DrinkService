@@ -1,1 +1,23 @@
 from flask import Flask, request, jsonify
+from api.drink_routes import drink_routes
+
+
+app = Flask(__name__)
+
+# Register the Blueprint
+app.register_blueprint(drink_routes)
+
+
+# Error handler for 404 Not Found
+@app.errorhandler(404)
+def not_found(error):
+    return jsonify({"error": "Endpoint not found"}), 404
+
+# Error handler for 500 Internal Server Error
+@app.errorhandler(500)
+def internal_error(error):
+    return jsonify({"error": "Internal server error"}), 500
+
+# Initializes database and runs Flask app on port 5002
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5002, debug=True)
