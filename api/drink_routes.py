@@ -8,7 +8,7 @@ from repositories.drink_repository import (
 drink_routes = Blueprint('drink_routes', __name__)
 
 # GET all drinks
-@drink_routes.route('/drinks', methods=['GET'])
+@drink_routes.route('', methods=['GET'])
 def get_drinks():
     try:
         drinks = db_get_drinks()
@@ -17,7 +17,7 @@ def get_drinks():
         return jsonify({'error': str(e)}), 500
 
 # GET a drink by its ID
-@drink_routes.route('/drinks/<int:drink_id>', methods=['GET'])
+@drink_routes.route('/<int:drink_id>', methods=['GET'])
 def get_drink_by_id(drink_id):
     try:
         drink = db_get_drink_by_id(drink_id)

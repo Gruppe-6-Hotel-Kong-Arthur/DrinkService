@@ -5,7 +5,7 @@ from database.initialize import init_db
 app = Flask(__name__)
 
 # Register the Blueprint
-app.register_blueprint(drink_routes)
+app.register_blueprint(drink_routes, url_prefix='/api/v1/drinks')
 
 
 # Error handler for 404 Not Found
