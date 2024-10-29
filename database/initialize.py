@@ -2,10 +2,13 @@ import pandas as pd
 import sqlite3
 import os
 
+import pandas as pd
+import sqlite3
+import os
+
 def init_db():
-    # Specify the Excel file
+    # Specify the Excel file and SQLite database file path
     excel_file = "xlxs/drinks_menu_with_sales.xlsx"
-    # Specify the SQLite database file path
     sqlite_db = os.path.join(os.getcwd(), "drinks_menu.db")
 
     # Delete the database file if it exists to avoid conflicts
@@ -19,26 +22,47 @@ def init_db():
     conn = sqlite3.connect(sqlite_db)
     cursor = conn.cursor()
 
-    # Create a new table with an auto-incrementing id column and columns based on the Excel data
+    # Create the categories table and insert initial values
+    cursor.execute("""
+        CREATE TABLE categories (
+            category_id INTEGER PRIMARY KEY,
+            category_name TEXT UNIQUE
+        )
+    """)
+    
+    # Insert the categories 
+    cursor.execute("INSERT INTO categories (category_id, category_name) VALUES (1, 'cocktail')")
+    cursor.execute("INSERT INTO categories (category_id, category_name) VALUES (2, 'coffee')")
+
+    # Create the drinks table 
     cursor.execute("""
         CREATE TABLE drinks (
-            id INTEGER PRIMARY KEY,
+            drink_id INTEGER PRIMARY KEY AUTOINCREMENT,
             drink_name TEXT,
-            category TEXT,
+            category_id INTEGER,
             price_dkk REAL,
-            units_sold INTEGER
+            FOREIGN KEY (category_id) REFERENCES categories(category_id)
         )
     """)
 
-    # Insert data from the DataFrame into the "drinks" table
+    # Map the category names to their corresponding IDs for insertion
+    category_map = {"cocktail": 1, "coffee": 2}
+
+    # Insert data from the DataFrame into the drinks table
     for _, row in data.iterrows():
-        cursor.execute("""
-            INSERT INTO drinks (drink_name, category, price_dkk, units_sold)
-            VALUES (?, ?, ?, ?)
-        """, (row['Drink Name'], row['Category'], row['Price (DKK)'], row['Units Sold']))
+        category = row['Category'].lower()
+        drink_name = row['Drink Name']
+        price_dkk = row['Price (DKK)']
+
+        # Get the corresponding category_id
+        category_id = category_map.get(category)
+        if category_id:
+            cursor.execute("""
+                INSERT INTO drinks (drink_name, category_id, price_dkk)
+                VALUES (?, ?, ?)
+            """, (drink_name, category_id, price_dkk))
 
     # Commit the changes and close the connection
     conn.commit()
     conn.close()
 
-    print("Database has been initialized successfully.")
