@@ -2,10 +2,6 @@ import pandas as pd
 import sqlite3
 import os
 
-import pandas as pd
-import sqlite3
-import os
-
 def init_db():
     # Specify the Excel file and SQLite database file path
     excel_file = "xlxs/drinks_menu_with_sales.xlsx"

@@ -8,7 +8,7 @@ def db_get_drinks():
     cursor = connection.cursor()
 
     cursor.execute( """
-        SELECT d.drink_id, d.drink_name, c.category_name AS category, d.price_dkk
+        SELECT d.drink_id, d.drink_name, c.category_id, d.price_dkk
         FROM drinks d
         JOIN categories c ON d.category_id = c.category_id
     """
@@ -25,7 +25,7 @@ def db_get_drink_by_id(drink_id):
     cursor = connection.cursor()
 
     cursor.execute( """
-        SELECT d.drink_id, d.drink_name, c.category_name AS category, d.price_dkk
+        SELECT d.drink_id, d.drink_name, c.category_id, d.price_dkk
         FROM drinks d
         JOIN categories c ON d.category_id = c.category_id
         WHERE d.drink_id = ?
