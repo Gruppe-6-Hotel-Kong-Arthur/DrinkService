@@ -7,8 +7,8 @@ def db_get_drinks():
     connection = create_connection()
     cursor = connection.cursor()
 
-    cursor.execute( """
-        SELECT d.drink_id, d.drink_name, c.category_id, d.price_dkk
+    cursor.execute("""
+        SELECT d.drink_id, d.drink_name, c.category_name AS category, d.price_dkk
         FROM drinks d
         JOIN categories c ON d.category_id = c.category_id
     """

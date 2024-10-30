@@ -14,3 +14,6 @@ docker run -d \
 ```
 
 docker run -d -p 5004:5004 --name drinks_service --network microservice-network drinks_service
+
+docker rm -f drinks_service && docker run -d -p 5004:5004 --name drinks_service --network microservice-network drinks_service
+
